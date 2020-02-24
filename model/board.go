@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ const (
 
 // Board backgammon board
 type Board struct {
-	board [][]int
+	Board [][]int
 }
 
 func reverse(numbers []int) []int {
@@ -28,7 +28,7 @@ func (b *Board) Setup() {
 	firstPosition := []int{0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2}
 	whiteBoard := firstPosition
 	redBoard := reverse(firstPosition)
-	b.board = [][]int{whiteBoard, redBoard}
+	b.Board = [][]int{whiteBoard, redBoard}
 }
 
 // Move piece from player
@@ -40,10 +40,10 @@ func (b *Board) Move(player int, initialPos int, moves int) error {
 		adversary = WHITE
 		moves = moves * -1
 	}
-	if b.board[adversary][initialPos+moves] > 1 {
+	if b.Board[adversary][initialPos+moves] > 1 {
 		return fmt.Errorf("!illegal move from %d to %d", initialPos, moves)
 	}
-	b.board[player][initialPos+moves]++
-	b.board[player][initialPos]--
+	b.Board[player][initialPos+moves]++
+	b.Board[player][initialPos]--
 	return nil
 }

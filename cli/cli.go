@@ -1,18 +1,21 @@
-package main
+package cli
 
-import "fmt"
+import (
+	"backgammon_go/model"
+	"fmt"
+)
 
-// PrintBoard prints the backgammon board in a CLI
-func PrintBoard(b *Board) {
+// Print prints the backgammon board in a CLI
+func Print(b model.Board) {
 	var output string
 	var redPositionUp = make([]int, 12)
 	var whitePositionUp = make([]int, 12)
 	var redPositionDown = make([]int, 12)
 	var whitePositionDown = make([]int, 12)
-	copy(redPositionUp, b.board[1][12:])
-	copy(whitePositionUp, b.board[0][12:])
-	copy(whitePositionDown, b.board[0][:12])
-	copy(redPositionDown, b.board[1][:12])
+	copy(redPositionUp, b.Board[1][12:])
+	copy(whitePositionUp, b.Board[0][12:])
+	copy(whitePositionDown, b.Board[0][:12])
+	copy(redPositionDown, b.Board[1][:12])
 	for i := 13; i < 25; i++ {
 		output += fmt.Sprintf("%4v", i)
 	}
