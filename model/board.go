@@ -42,7 +42,7 @@ func (b *Board) Move(initialPos int, moves int) error {
 	var position = initialPos - 1
 	moves = moves * direction
 
-	if b.Board[player][position] < 1 || b.Board[adversary][position+moves] > 1 || (!b.IsHit() && b.Board[player][position] < 1) {
+	if (!b.IsHit() && b.Board[player][position] < 1) || b.Board[adversary][position+moves] > 1 {
 		return fmt.Errorf("!illegal move from %d to %d", position, moves)
 	}
 
