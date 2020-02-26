@@ -7,12 +7,21 @@ import (
 
 func main() {
 	board := model.Board{}
+	var die int 
+	var position int
+	cli.Clear()
 	board.Setup()
-	cli.Print(board)
-	board.Move(model.WHITE, 24, 4)
-	cli.Print(board)
-	board.Move(model.WHITE, 24, 4)
-	cli.Print(board)
-	board.Move(model.WHITE, 20, 1)
-	cli.Print(board)
+	for {
+		cli.Print(board)
+		die = board.RollDie()
+		for {
+			position = cli.Prompt(board, die)
+			err := board.Move(position, die)
+			if err == nil {
+				break;
+			}
+		}
+		board.NextTurn()
+		cli.Clear()
+	}
 }
