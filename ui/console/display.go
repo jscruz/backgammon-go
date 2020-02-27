@@ -19,17 +19,14 @@ const (
 	TopHome = 27
 )
 
-type Model struct{
-	points [28]point
-}
+type Model [28]point
+
 type point [cellsPerPoint]string
 
 // NewModel generates a new ui Model and instantiates is points field
 func NewModel() *Model {
 
-	pts := [28]point{}
-
-	m := &Model{pts}
+	m := &Model{}
 
 	return m
 }
@@ -44,17 +41,17 @@ func (m *Model) SetPointCount(point, count int, s string) {
 	m.resetPoint(point)
 
 	for i := 0; i < count && i < cellsPerPoint; i++ {
-		m.points[point][i] = s
+		m[point][i] = s
 	}
 
 	if count > cellsPerPoint {
-		m.points[point][topCell] = strconv.Itoa(count - topCell)
+		m[point][topCell] = strconv.Itoa(count - topCell)
 	}
 }
 
 func (m *Model) resetPoint(point int) {
 	for i := 0; i < cellsPerPoint; i++ {
-		m.points[point][i] = ""
+		m[point][i] = ""
 	}
 }
 
@@ -64,7 +61,7 @@ func (m *Model) draw() error {
 
 	tpl, err := template.New("board").Funcs(template.FuncMap{
 		"c": func(p, i int, m *Model) string {
-			return fmt.Sprintf("%-2v", m.points[p][i])
+			return fmt.Sprintf("%-2v", m[p][i])
 		},
 	}).Parse(outputTemplate)
 	if err != nil {
