@@ -1,18 +1,28 @@
 package console_test
 
 import (
+	"backgammon_go/model"
 	"backgammon_go/ui/console"
 	"testing"
 )
 
 func TestDirtyTest(t *testing.T) {
 
-	m := console.NewModel()
-	m.SetPointCount(12, 4, "x")
+	b := model.Board{}
+	b.Setup()
 
-	m.SetPointCount(console.TopBar, 1, "x")
-	m.SetPointCount(console.BottomHome, 20, "x")
-	m.SetPointCount(console.TopHome, 10, "o")
+
+	m := console.NewModel()
+
+	//m.SetPointCount(9, 15, "X")
+
+	for i, p := range b.Board[0] {
+		m.SetPointCount(i + 1, p, "X")
+	}
+
+	for i, p := range b.Board[1] {
+		m.SetPointCount(i + 1, p, "O")
+	}
 
  	err := console.Draw(m)
 	if err != nil {
