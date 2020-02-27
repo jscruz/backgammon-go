@@ -9,6 +9,9 @@ import (
 )
 
 const (
+	cellsPerPoint = 6 // in order to change this, just the template needs lines added or removed
+	topCell = cellsPerPoint - 1 // this is the cell that might have numbers if there are too many men
+
 	BottomBar = 26
 	TopBar = 25
 
@@ -19,7 +22,7 @@ const (
 type Model struct{
 	points [28]point
 }
-type point [6]string
+type point [cellsPerPoint]string
 
 // NewModel generates a new ui Model and instantiates is points field
 func NewModel() *Model {
@@ -38,18 +41,26 @@ func NewModel() *Model {
 //  formatted to be 2 characters wide.
 func (m *Model) SetPointCount(point, count int, s string) {
 
-	for i := 0; i < count && i < 6; i++ {
+	m.resetPoint(point)
+
+	for i := 0; i < count && i < cellsPerPoint; i++ {
 		m.points[point][i] = s
 	}
 
-	if count > 6 {
-		m.points[point][5] = strconv.Itoa(count - 5)
+	if count > cellsPerPoint {
+		m.points[point][topCell] = strconv.Itoa(count - topCell)
+	}
+}
+
+func (m *Model) resetPoint(point int) {
+	for i := 0; i < cellsPerPoint; i++ {
+		m.points[point][i] = ""
 	}
 }
 
 
 // Draw renders the Model in the template and draws it out to the console
-func Draw(m *Model) error {
+func (m *Model) draw() error {
 
 	tpl, err := template.New("board").Funcs(template.FuncMap{
 		"c": func(p, i int, m *Model) string {
@@ -71,7 +82,7 @@ func Draw(m *Model) error {
 
 // GenerateModelFromBoard converts a board object [][]int into a Model to be rendered
 // by the template
-func GenerateModelFromBoard(b model.Board) error {
+func Draw(b model.Board) error {
 	m := NewModel()
 
 	for i, p := range b.Board[0] {
@@ -82,7 +93,7 @@ func GenerateModelFromBoard(b model.Board) error {
 		m.SetPointCount(i + 1, p, "O")
 	}
 
-	err := Draw(m)
+	err := m.draw()
 	if err != nil {
 		return err
 	}

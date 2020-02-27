@@ -3,6 +3,7 @@ package main
 import (
 	"backgammon_go/cli"
 	"backgammon_go/model"
+	"backgammon_go/ui/console"
 )
 
 func main() {
@@ -12,7 +13,10 @@ func main() {
 	cli.Clear()
 	board.Setup()
 	for {
-		cli.Print(board)
+		//cli.Print(board)
+
+		console.GenerateModelFromBoard(board)
+
 		die = board.RollDie()
 		for {
 			position = cli.Prompt(board, die)
