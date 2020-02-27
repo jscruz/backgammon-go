@@ -4,7 +4,7 @@ import (
 	"backgammon_go/model"
 	"fmt"
 	"os"
-    "os/exec"
+	"os/exec"
 )
 
 // Print prints the backgammon board in a CLI
@@ -81,19 +81,19 @@ func Print(b model.Board) {
 
 func Clear() {
 	cmd := exec.Command("clear")
-    cmd.Stdout = os.Stdout
-    cmd.Run()
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 }
 
-func Prompt(board model.Board , die int) int{
+func Prompt(board model.Board, die int) int {
 	var position int
 	fmt.Printf("Moves: %d >> ", die)
 	if board.IsHit() {
 		fmt.Printf("You have been hit. Moving to recover")
 		position = board.Turn.HitPosition()
 	} else {
-			fmt.Printf("Move from [1-24]:")
-			fmt.Scanf("%d", &position)
+		fmt.Printf("Move from [1-24]:")
+		fmt.Scanf("%d", &position)
 	}
 	return position
 }

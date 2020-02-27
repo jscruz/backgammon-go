@@ -9,17 +9,23 @@ import (
 )
 
 const (
-	cellsPerPoint = 6 // in order to change this, just the template needs lines added or removed
-	topCell = cellsPerPoint - 1 // this is the cell that might have numbers if there are too many men
+	cellsPerPoint = 6                 // in order to change this, just the template needs lines added or removed
+	topCell       = cellsPerPoint - 1 // this is the cell that might have numbers if there are too many men
 
-	BottomBar = 26
+	BtmBar = 26
 	TopBar = 25
 
-	BottomHome = 0
+	BtmHome = 0
 	TopHome = 27
+
+	TopDie1 = 28
+	TopDie2 = 29
+
+	BtmDie1 = 30
+	BtmDie2 = 31
 )
 
-type Model [28]point
+type Model [32]point
 
 type point [cellsPerPoint]string
 
@@ -55,7 +61,6 @@ func (m *Model) resetPoint(point int) {
 	}
 }
 
-
 // Draw renders the Model in the template and draws it out to the console
 func (m *Model) Draw() error {
 
@@ -75,7 +80,6 @@ func (m *Model) Draw() error {
 
 	return nil
 }
-
 
 // GenerateModelFromBoard converts a board object [][]int into a Model to be rendered
 // by the template

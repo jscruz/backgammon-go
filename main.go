@@ -8,7 +8,7 @@ import (
 
 func main() {
 	board := model.Board{}
-	var die int 
+	var die int
 	var position int
 	cli.Clear()
 	board.Setup()
@@ -24,7 +24,7 @@ func main() {
 			position = cli.Prompt(board, die)
 			err := board.Move(position, die)
 			if err == nil {
-				break;
+				break
 			}
 		}
 		board.NextTurn()

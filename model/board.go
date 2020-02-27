@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"math/rand"
 )
+
 type Player int
+
 // Players
 const (
 	White Player = iota
@@ -13,9 +15,9 @@ const (
 
 // Board backgammon board
 type Board struct {
-	Turn Player
+	Turn  Player
 	Board [][]int
-	Hit [2]int
+	Hit   [2]int
 }
 
 func reverse(numbers []int) []int {
@@ -67,7 +69,7 @@ func (b *Board) IsHit() bool {
 func (b *Board) RollDie() int {
 	min := 1
 	max := 6
-	return rand.Intn(max - min) + min
+	return rand.Intn(max-min) + min
 }
 
 func (b *Board) NextTurn() {
@@ -86,7 +88,7 @@ func (player Player) HitPosition() int {
 		return 0
 	}
 }
-func adversary (player Player) (Player, int) {
+func adversary(player Player) (Player, int) {
 	switch player {
 	case White:
 		return Red, -1
