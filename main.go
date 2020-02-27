@@ -13,21 +13,20 @@ func main() {
 	cli.Clear()
 	board.Setup()
 	for {
-
-		//cli.Print(board)
-
-		m := console.GenerateModelFromBoard(board)
-		m.Draw()
-
-		die = board.RollDie()
-		for {
-			position = cli.Prompt(board, die)
-			err := board.Move(position, die)
-			if err == nil {
-				break
+		for i:=0; i < 2; i++ {
+			m := console.GenerateModelFromBoard(board)
+			m.Draw()
+	
+			die = board.RollDie()
+			for {
+				position = cli.Prompt(board, die)
+				err := board.Move(position, die)
+				if err == nil {
+					break
+				}
 			}
+			cli.Clear()
 		}
 		board.NextTurn()
-		cli.Clear()
 	}
 }
