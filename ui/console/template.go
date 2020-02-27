@@ -1,6 +1,9 @@
 package console
 
-var outputTemplate = `
+// c is a function that will get the Point and Cell value from the model thats passed in "."
+// ie. {{ c 13 4 . }} will return the 4th man of the 13th point
+
+var consoleTemplate = `
   13  14  15  16  17  18  |   |  19  20  21  22  23  24 |   Home
   -   -   -   -   -   -   |   |  -   -   -   -   -   -  |          
   {{ c 13 0 . }}  {{ c 14 0 . }}  {{ c 15 0 . }}  {{ c 16 0 . }}  {{ c 17 0 . }}  {{ c 18 0 . }}  | {{ c 25 0 . }}|  {{ c 19 0 . }}  {{ c 20 0 . }}  {{ c 21 0 . }}  {{ c 22 0 . }}  {{ c 23 0 . }}  {{ c 24 0 . }} |    {{ c 27 0 . }}

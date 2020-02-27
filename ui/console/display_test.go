@@ -25,7 +25,7 @@ func TestDirtyTest(t *testing.T) {
 	//	m.SetPointCount(i + 1, p, "O")
 	//}
 
- 	err := m.draw()
+ 	err := m.Draw()
 	if err != nil {
 		t.Fatal(err)
 	}

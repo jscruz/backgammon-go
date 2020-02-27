@@ -13,9 +13,11 @@ func main() {
 	cli.Clear()
 	board.Setup()
 	for {
+
 		//cli.Print(board)
 
-		console.GenerateModelFromBoard(board)
+		m := console.GenerateModelFromBoard(board)
+		m.Draw()
 
 		die = board.RollDie()
 		for {

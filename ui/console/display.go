@@ -57,13 +57,13 @@ func (m *Model) resetPoint(point int) {
 
 
 // Draw renders the Model in the template and draws it out to the console
-func (m *Model) draw() error {
+func (m *Model) Draw() error {
 
 	tpl, err := template.New("board").Funcs(template.FuncMap{
 		"c": func(p, i int, m *Model) string {
 			return fmt.Sprintf("%-2v", m[p][i])
 		},
-	}).Parse(outputTemplate)
+	}).Parse(consoleTemplate)
 	if err != nil {
 		return err
 	}
@@ -79,21 +79,23 @@ func (m *Model) draw() error {
 
 // GenerateModelFromBoard converts a board object [][]int into a Model to be rendered
 // by the template
-func Draw(b model.Board) error {
+// TODO: This doesnt live in here....
+func GenerateModelFromBoard(b model.Board) *Model {
 	m := NewModel()
 
 	for i, p := range b.Board[0] {
-		m.SetPointCount(i + 1, p, "X")
+		// only redraw points that have something in them
+		if p > 0 {
+			m.SetPointCount(i+1, p, "X")
+		}
 	}
 
 	for i, p := range b.Board[1] {
-		m.SetPointCount(i + 1, p, "O")
+		// only redraw points that have something in them as to accidentally empty all the others
+		if p > 0 {
+			m.SetPointCount(i+1, p, "O")
+		}
 	}
 
-	err := m.draw()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return m
 }
