@@ -14,17 +14,17 @@ func main() {
 	board.Setup()
 	for {
 		for i:=0; i < 2; i++ {
-			m := console.GenerateViewModelFromBoard(board)
-			m.Draw()
-	
+			m := console.GenerateModelFromBoard(board)
 			die = board.RollDie()
 			for {
+				m.Draw()
 				cli.ShowPips(board)
 				position = cli.Prompt(board, die)
 				err := board.Move(position, die)
 				if err == nil {
 					break
 				}
+				cli.Clear()
 			}
 			cli.Clear()
 		}
