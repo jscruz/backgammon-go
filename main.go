@@ -14,7 +14,7 @@ func main() {
 	board.Setup()
 	for {
 		for i:=0; i < 2; i++ {
-			m := console.GenerateModelFromBoard(board)
+			m := console.GenerateViewModelFromBoard(board)
 			m.Draw()
 	
 			die = board.RollDie()
