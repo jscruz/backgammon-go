@@ -85,6 +85,10 @@ func Clear() {
 	cmd.Run()
 }
 
+func ShowPips(board model.Board) {
+	fmt.Printf("Pips: White [%d] Red [%d]\n", board.Pips[model.White], board.Pips[model.Red])
+}
+
 func Prompt(board model.Board, die int) int {
 	var position int
 	fmt.Printf("Moves: %d >> ", die)
