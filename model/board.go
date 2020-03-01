@@ -82,13 +82,9 @@ func (b *Board) RollDie() int {
 }
 
 func (b *Board) NextTurn() {
-	switch b.Turn {
-	case White:
-		b.Turn = Red
-	default:
-		b.Turn = White
-	}
+	b.Turn = 1 - b.Turn
 }
+
 func (player Player) HitPosition() int {
 	switch player {
 	case White:

@@ -18,6 +18,7 @@ func main() {
 			die = board.RollDie()
 			for {
 				m.Draw()
+				cli.ShowTurn(board)
 				cli.ShowPips(board)
 				position = cli.Prompt(board, die)
 				err := board.Move(position, die)

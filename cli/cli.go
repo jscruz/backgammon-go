@@ -12,6 +12,13 @@ func Clear() {
 	cmd.Stdout = os.Stdout
 	cmd.Run()
 }
+func ShowTurn(board model.Board) {
+	turn := "X"
+	if board.Turn == model.Red {
+		turn = "0"
+	}
+	fmt.Printf("Turn: %s\n", turn)
+}
 
 func ShowPips(board model.Board) {
 	fmt.Printf("Pips: White [%d] Red [%d]\n", board.Pips[model.White], board.Pips[model.Red])
@@ -24,7 +31,7 @@ func Prompt(board model.Board, die int) int {
 		fmt.Printf("You have been hit. Moving to recover")
 		position = board.Turn.HitPosition()
 	} else {
-		fmt.Printf("Move from [1-24]:")
+		fmt.Printf("Select checker [1-24]:")
 		fmt.Scanf("%d", &position)
 	}
 	return position
