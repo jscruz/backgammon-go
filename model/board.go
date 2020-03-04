@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"math/rand"
 )
 
@@ -9,70 +8,82 @@ type Player int
 
 // Players
 const (
+
 	White Player = iota
 	Red
+
+	Spaces = 26
+
+	BarPosition = Spaces - 1
+
+	HomePosition = 0
 )
 
 // Board backgammon board
 type Board struct {
-	Turn  Player
-	Board [][]int
+	Turn  int
+	Board [Spaces][Spaces]int
 	Hit   [2]int
 	Borne [2]int
 	Pips [2]int
 }
 
-func reverse(numbers []int) []int {
-	newNumbers := make([]int, 0, len(numbers))
-	for i := len(numbers) - 1; i >= 0; i-- {
-		newNumbers = append(newNumbers, numbers[i])
+func reverse(numbers [Spaces]int) [Spaces]int {
+	var newNumbers [Spaces]int
+	j := 0
+	for i := Spaces - 1; i >= 0; i-- {
+		newNumbers[j] = numbers[i]
+		j++
 	}
 	return newNumbers
 }
 
 // Setup the backgammon board with the initial position for players
-func (b *Board) Setup() {
-	firstPosition := []int{0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2}
-	whiteBoard := firstPosition
-	redBoard := reverse(firstPosition)
-	b.Board = [][]int{whiteBoard, redBoard}
-	b.Turn = White
+func NewBoard() *Board {
+	b := Board{}
+
+	var redPosition    = [Spaces]int{0,0,0,0,0,0,5,0,3,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,2,0}
+	var whitePosition  = [Spaces]int{0,0,0,0,0,0,5,0,3,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,2,0}
+	b.Board = [Spaces][Spaces]int{whitePosition, redPosition}
+	b.Turn = 0
+	b.GetPips()
+	return &b
+}
+
+func (b *Board) Move(player Player, initialPos int, moves int){
+	possibleMoves := b.GetPossibleMoves(player, moves)
+	adversaryBoard := reverse(b.Board[adversary(player)])
+	if contains(possibleMoves, initialPos) {
+		b.Board[player][initialPos]--
+		if adversaryBoard[initialPos] < 2 {
+			b.Board[adversary(player)][getAdversaryPosition(initialPos)] = 0
+			b.Board[adversary(player)][BarPosition]++
+		}
+	}
 	b.GetPips()
 }
 
-// Move piece from player
-func (b *Board) Move(initialPos int, moves int) error {
-	var player = b.Turn
-	var adversary, direction = adversary(player)
-	var position = initialPos - 1
-	moves = moves * direction
+func (b *Board) GetPossibleMoves(player Player, moves int) []int {
+	currentPlayerBoard := b.Board[player]
+	adversaryBoard := reverse(b.Board[adversary(player)])
+	var possibleMoves []int
 
-	if (!b.IsPlayerHome() && (position+moves > 23 || position+moves < 0)) || (!b.IsHit() && b.Board[player][position] < 1) || b.Board[adversary][position+moves] > 1 {
-		return fmt.Errorf("!illegal move from %d to %d", position, moves)
+	if currentPlayerBoard[BarPosition] > 0 {
+		if adversaryBoard[BarPosition-moves] < 2 {
+			possibleMoves = append(possibleMoves, BarPosition)
+		}
+		return possibleMoves
 	}
 
-	if b.Board[adversary][position+moves] == 1 {
-		b.Board[adversary][position+moves]--
-		b.Hit[adversary]++
+	for i:=0; i<Spaces; i++ {
+		if i-moves < HomePosition && b.IsPlayerHome(player) && i > HomePosition {
+			possibleMoves = append(possibleMoves, i)
+		}
+		if i-moves > HomePosition && currentPlayerBoard[i] > 0 && adversaryBoard[i-moves] < 2 {
+			possibleMoves = append(possibleMoves, i)
+		}
 	}
-
-	if b.IsPlayerHome() && (position+moves > 23 || position+moves < 0) {
-		b.Borne[player]++
-	} else {
-		b.Board[player][position+moves]++
-	} 
-	
-	if b.IsHit() {
-		b.Hit[player]--
-	} else {
-		b.Board[player][position]--
-	}
-	b.GetPips()
-	return nil
-}
-
-func (b *Board) IsHit() bool {
-	return b.Hit[b.Turn] > 0
+	return possibleMoves
 }
 
 func (b *Board) RollDie() int {
@@ -81,34 +92,24 @@ func (b *Board) RollDie() int {
 	return rand.Intn(max-min) + min
 }
 
-func (b *Board) NextTurn() {
-	b.Turn = 1 - b.Turn
+func (b *Board) NextTurn() Player {
+	b.Turn++
+	return Player(b.Turn % 2)
 }
 
-func (player Player) HitPosition() int {
+func adversary(player Player) Player {
 	switch player {
 	case White:
-		return 25
+		return Red
 	default:
-		return 0
-	}
-}
-func adversary(player Player) (Player, int) {
-	switch player {
-	case White:
-		return Red, -1
-	default:
-		return White, 1
+		return White
 	}
 }
 
-func (b *Board) IsPlayerHome () bool {
+func (b *Board) IsPlayerHome (player Player) bool {
 	checkers := []int{}
 	sum := 0 
-	checkers = b.Board[b.Turn][:18]
-	if b.Turn == Red {
-		checkers = b.Board[b.Turn][6:]
-	}
+	checkers = b.Board[player][:18]
 	for _, num := range checkers {
         sum += num
 	}
@@ -116,14 +117,28 @@ func (b *Board) IsPlayerHome () bool {
 }
 
 func (board *Board) GetPips () {
-	board.Pips[White] = CalculatePips(board.Board[White]) + board.Hit[White] * 25
-	board.Pips[Red] = CalculatePips(reverse(board.Board[Red])) + board.Hit[Red] * 25
+	board.Pips[White] = CalculatePips(board.Board[White])
+	board.Pips[Red] = CalculatePips(board.Board[Red])
 }
 
-func CalculatePips (position []int) int {
+func CalculatePips (position [Spaces]int) int {
 	pips := 0
 	for i:=0; i<len(position); i++ {
-		pips += (i+1) * position[i]
+		pips += i*position[i]
 	}
 	return pips
+}
+
+func getAdversaryPosition(position int) int {
+	adversary  := []int{25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
+	return adversary[position]
+}
+
+func contains(s []int, e int) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }

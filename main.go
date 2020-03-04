@@ -11,7 +11,7 @@ func main() {
 	var die int
 	var position int
 	cli.Clear()
-	board.Setup()
+	board.NewBoard()
 	for {
 		for i:=0; i < 2; i++ {
 			m := console.GenerateViewModelFromBoard(board)
