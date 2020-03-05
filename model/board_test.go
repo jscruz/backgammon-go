@@ -90,3 +90,18 @@ func TestNoPossibleMovesWhenInBar(t *testing.T) {
 	fmt.Printf("%v", moves)
 	assert.Equal(t, 0, len(moves))
 }
+
+func TestAdversaryPosition(t *testing.T){
+	a := [Spaces]int{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}
+	b := reverse(a)
+	for i:=0; i < Spaces; i++ {
+		assert.Equal(t, b[i], getAdversaryPosition(i))
+	}
+}
+
+func Testcontains(t *testing.T) {
+	a := []int{0,1,2,3,4,5,6}
+
+	assert.True(t, contains(a, 1))
+	assert.False(t, contains(a,19))
+}
