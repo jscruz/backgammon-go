@@ -88,20 +88,21 @@ func (m *Model) Draw() error {
 // by the template
 // TODO: This doesnt live in here.... The view shouldnt be concerned with the "controllers" model of the world.
 //  here just to test how it works without changing the game code
-func GenerateViewModelFromBoard(b model.Board) *Model {
+func GenerateViewModelFromBoard(b *model.Board) *Model {
 	m := NewModel()
 
-	for i, p := range b.Board[0] {
+	for i := range b.Board[0] {
+		p := b.Board[0][len(b.Board[0])-1-i]
 		// only redraw points that have something in them
 		if p > 0 {
-			m.SetPointCount(i+1, p, Plyr1)
+			m.SetPointCount(i, p, Plyr1)
 		}
 	}
 
 	for i, p := range b.Board[1] {
 		// only redraw points that have something in them as to accidentally empty all the others
 		if p > 0 {
-			m.SetPointCount(i+1, p, Plyr2)
+			m.SetPointCount(i, p, Plyr2)
 		}
 	}
 

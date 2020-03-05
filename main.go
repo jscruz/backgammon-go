@@ -7,22 +7,21 @@ import (
 )
 
 func main() {
-	board := model.Board{}
+	board := model.NewBoard()
 	var die int
 	var position int
 	cli.Clear()
-	board.Setup()
 	for {
-		for i:=0; i < 2; i++ {
+		for i := 0; i < 2; i++ {
 			m := console.GenerateViewModelFromBoard(board)
-			die = board.RollDie()
+			die = model.RollDie()
 			for {
 				m.Draw()
-				cli.ShowTurn(board)
 				cli.ShowPips(board)
+				cli.ShowPossibleMoves(board, die)
 				position = cli.Prompt(board, die)
-				err := board.Move(position, die)
-				if err == nil {
+				allowedMove, err := board.Move(board.GetCurrentPlayer(), position, die)
+				if allowedMove || err != nil {
 					break
 				}
 				cli.Clear()

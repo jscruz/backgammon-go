@@ -12,24 +12,25 @@ func Clear() {
 	cmd.Stdout = os.Stdout
 	cmd.Run()
 }
-func ShowTurn(board model.Board) {
-	turn := "X"
-	if board.Turn == model.Red {
-		turn = "0"
-	}
-	fmt.Printf("Turn: %s\n", turn)
+
+func ShowBoard(board model.Board) {
+	fmt.Printf("%v\n%v\n", board.Board[0], board.Board[1])
 }
 
-func ShowPips(board model.Board) {
+func ShowPossibleMoves(board *model.Board, moves int) {
+	fmt.Printf("Possible moves: %v\n", board.GetPossibleMoves(board.GetCurrentPlayer(), moves))
+}
+
+func ShowPips(board *model.Board) {
 	fmt.Printf("Pips: White [%d] Red [%d]\n", board.Pips[model.White], board.Pips[model.Red])
 }
 
-func Prompt(board model.Board, die int) int {
+func Prompt(board *model.Board, die int) int {
 	var position int
 	fmt.Printf("Moves: %d >> ", die)
-	if board.IsHit() {
+	if board.IsHit(board.GetCurrentPlayer()) {
 		fmt.Printf("You have been hit. Moving to recover")
-		position = board.Turn.HitPosition()
+		position = model.BarPosition
 	} else {
 		fmt.Printf("Select checker [1-24]:")
 		fmt.Scanf("%d", &position)
