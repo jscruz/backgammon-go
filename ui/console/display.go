@@ -88,7 +88,7 @@ func (m *Model) Draw() error {
 // by the template
 // TODO: This doesnt live in here.... The view shouldnt be concerned with the "controllers" model of the world.
 //  here just to test how it works without changing the game code
-func GenerateViewModelFromBoard(b model.Board) *Model {
+func GenerateViewModelFromBoard(b *model.Board) *Model {
 	m := NewModel()
 
 	for i := range b.Board[0] {

@@ -40,14 +40,14 @@ func reverse(numbers [Spaces]int) [Spaces]int {
 
 // Setup the backgammon board with the initial position for players
 func NewBoard() *Board {
-	b := Board{}
+	b := &Board{}
 
 	var redPosition = [Spaces]int{0, 0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0}
 	var whitePosition = [Spaces]int{0, 0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0}
 	b.Board = [Spaces][Spaces]int{whitePosition, redPosition}
 	b.Turn = 0
 	b.GetPips()
-	return &b
+	return b
 }
 
 func (b *Board) Move(player Player, initialPos int, moves int) (bool, error) {
