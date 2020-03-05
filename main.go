@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	board := *model.NewBoard()
+	board := model.NewBoard()
 	var die int
 	var position int
 	cli.Clear()

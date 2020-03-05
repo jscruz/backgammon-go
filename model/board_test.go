@@ -99,7 +99,7 @@ func TestAdversaryPosition(t *testing.T){
 	}
 }
 
-func Testcontains(t *testing.T) {
+func TestContains(t *testing.T) {
 	a := []int{0,1,2,3,4,5,6}
 
 	assert.True(t, contains(a, 1))
