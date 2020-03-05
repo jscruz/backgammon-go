@@ -10,25 +10,30 @@ import (
 
 const (
 	cellsPerPoint = 6                 // in order to change this, just the template needs lines added or removed
-	topCell       = cellsPerPoint - 1 // this is the cell that might have numbers if there are too many men
+	maxCell       = cellsPerPoint - 1 // this is the cell that might have numbers if there are too many men
 
 	BtmBar = 26
 	TopBar = 25
 
 	BtmHome = 0
 	TopHome = 27
-
-	TopDie1 = 28
-	TopDie2 = 29
-
-	BtmDie1 = 30
-	BtmDie2 = 31
-
-	Plyr1 = "X"
-	Plyr2 = "0"
 )
 
-type Model [32]point
+type Model struct {
+	BtmPlyrName string
+	TopPlyrName string
+
+	BtmPlyrDie [2]string
+	TopPlyrDie [2]string
+
+	NeutralCube string
+	BtmPlyrCube string
+	TopPlyrCube string
+
+	points [28]point
+	btmPlyrChar string
+	topPlyrChar string
+}
 
 type point [cellsPerPoint]string
 
@@ -36,6 +41,9 @@ type point [cellsPerPoint]string
 func NewModel() *Model {
 
 	m := &Model{}
+
+	m.topPlyrChar = "X"
+	m.btmPlyrChar = "0"
 
 	return m
 }
@@ -50,17 +58,17 @@ func (m *Model) SetPointCount(point, count int, s string) {
 	m.resetPoint(point)
 
 	for i := 0; i < count && i < cellsPerPoint; i++ {
-		m[point][i] = s
+		m.points[point][i] = s
 	}
 
 	if count > cellsPerPoint {
-		m[point][topCell] = strconv.Itoa(count - topCell)
+		m.points[point][maxCell] = strconv.Itoa(count - maxCell)
 	}
 }
 
 func (m *Model) resetPoint(point int) {
 	for i := 0; i < cellsPerPoint; i++ {
-		m[point][i] = ""
+		m.points[point][i] = ""
 	}
 }
 
@@ -69,7 +77,7 @@ func (m *Model) Draw() error {
 
 	tpl, err := template.New("board").Funcs(template.FuncMap{
 		"c": func(p, i int, m *Model) string {
-			return fmt.Sprintf("%-2v", m[p][i])
+			return fmt.Sprintf("%-2v", m.points[p][i])
 		},
 	}).Parse(consoleTemplate)
 	if err != nil {
@@ -94,14 +102,14 @@ func GenerateViewModelFromBoard(b model.Board) *Model {
 	for i, p := range b.Board[0] {
 		// only redraw points that have something in them
 		if p > 0 {
-			m.SetPointCount(i+1, p, Plyr1)
+			m.SetPointCount(i+1, p, m.btmPlyrChar)
 		}
 	}
 
 	for i, p := range b.Board[1] {
 		// only redraw points that have something in them as to accidentally empty all the others
 		if p > 0 {
-			m.SetPointCount(i+1, p, Plyr2)
+			m.SetPointCount(i+1, p, m.topPlyrChar)
 		}
 	}
 
