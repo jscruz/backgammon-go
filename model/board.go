@@ -22,7 +22,7 @@ const (
 // Board backgammon board
 type Board struct {
 	Turn  int
-	Board [Spaces][Spaces]int
+	Board [2][Spaces]int
 	Hit   [2]int
 	Borne [2]int
 	Pips  [2]int
@@ -44,7 +44,7 @@ func NewBoard() *Board {
 
 	var redPosition = [Spaces]int{0, 0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0}
 	var whitePosition = [Spaces]int{0, 0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0}
-	b.Board = [Spaces][Spaces]int{whitePosition, redPosition}
+	b.Board = [2][Spaces]int{whitePosition, redPosition}
 	b.Turn = 0
 	b.GetPips()
 	return &b
@@ -97,7 +97,7 @@ func (b *Board) GetPossibleMoves(player Player, moves int) []int {
 	return possibleMoves
 }
 
-func (b *Board) RollDie() int {
+func RollDie() int {
 	min := 1
 	max := 6
 	return rand.Intn(max-min) + min

@@ -14,7 +14,7 @@ func main() {
 	for {
 		for i := 0; i < 2; i++ {
 			m := console.GenerateViewModelFromBoard(board)
-			die = board.RollDie()
+			die = model.RollDie()
 			for {
 				m.Draw()
 				cli.ShowPips(board)
