@@ -8,20 +8,19 @@ import (
 
 func main() {
 	board := model.NewBoard()
-	var die int
-	var position int
 	cli.Clear()
 	for {
-		for i := 0; i < 2; i++ {
-			m := console.GenerateViewModelFromBoard(board)
-			die = model.RollDie()
+		dice := model.RollDice()
+		for i := 0; i < len(dice); i++ {
 			for {
+				m := console.GenerateViewModelFromBoard(board)
 				m.Draw()
 				cli.ShowPips(board)
-				cli.ShowPossibleMoves(board, die)
-				position = cli.Prompt(board, die)
-				allowedMove, err := board.Move(board.GetCurrentPlayer(), position, die)
-				if allowedMove || err != nil {
+				cli.ShowPossibleMoves(board, dice[i])
+				cli.ShowTurn(board)
+				position := cli.Prompt(board, dice[i])
+				err := board.Move(board.GetCurrentPlayer(), position, dice[i])
+				if err == nil {
 					break
 				}
 				cli.Clear()
